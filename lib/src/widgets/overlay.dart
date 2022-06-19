@@ -685,8 +685,14 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
   @override
   Widget build(BuildContext context) => AnchoredOverlay(
         showOverlay: _state != FeatureOverlayState.closed,
-        overlayBuilder: (BuildContext context, Offset anchor) =>
-            _buildOverlay(anchor),
+        overlayBuilder: (BuildContext context, Offset anchor) {
+          double dx = MediaQuery.of(context).size.width > 768
+              ? anchor.dx *
+                  ((MediaQuery.of(context).size.width - 320) /
+                      (MediaQuery.of(context).size.width))
+              : anchor.dx;
+          return _buildOverlay(Offset(dx, anchor.dy));
+        },
         child: widget.child,
       );
 }
