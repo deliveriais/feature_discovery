@@ -137,6 +137,9 @@ class DescribedFeatureOverlay extends StatefulWidget {
   /// all of the current steps are dismissed.
   final Future<bool> Function()? onBackgroundTap;
 
+  /// for desktop if width > 768
+  final bool useCustomPosition;
+
   const DescribedFeatureOverlay({
     Key? key,
     required this.featureId,
@@ -162,6 +165,7 @@ class DescribedFeatureOverlay extends StatefulWidget {
     this.barrierDismissible = true,
     this.backgroundDismissible = false,
     this.onBackgroundTap,
+    this.useCustomPosition = false,
   })  : assert(
           barrierDismissible == true || onDismiss == null,
           'Cannot provide both a barrierDismissible and onDismiss function\n'
@@ -686,7 +690,8 @@ class _DescribedFeatureOverlayState extends State<DescribedFeatureOverlay>
   Widget build(BuildContext context) => AnchoredOverlay(
         showOverlay: _state != FeatureOverlayState.closed,
         overlayBuilder: (BuildContext context, Offset anchor) {
-          final dx = MediaQuery.of(context).size.width > 768 && widget.featureId=='feature4'
+          final dx = MediaQuery.of(context).size.width > 768 &&
+                  widget.useCustomPosition
               ? anchor.dx *
                   ((MediaQuery.of(context).size.width - 320) /
                       (MediaQuery.of(context).size.width))
